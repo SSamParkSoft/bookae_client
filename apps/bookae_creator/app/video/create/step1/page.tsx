@@ -246,10 +246,10 @@ export default function Step1Page() {
       transition={{ duration: 0.3 }}
       className="flex min-h-screen justify-center"
     >
-      <div className="flex">
+      <div className="flex w-full max-w-[1600px]">
         <StepIndicator />
-        <div className="p-8 overflow-y-auto">
-          <div className="w-[918px]">
+        <div className="flex-1 p-4 md:p-8 overflow-y-auto min-w-0">
+          <div className="max-w-full">
           <h1 className={`text-3xl font-bold mb-2 ${
             theme === 'dark' ? 'text-white' : 'text-gray-900'
           }`}>
@@ -465,7 +465,7 @@ export default function Step1Page() {
           </div>
         </div>
       </div>
-      <div className="p-8">
+      <div className="hidden lg:block p-4 md:p-8 flex-shrink-0">
         <SelectedProductsPanel />
       </div>
     </motion.div>

@@ -40,7 +40,7 @@ export default function SelectedProductsPanel() {
 
   return (
     <div
-      className={`sticky top-8 w-80 h-[calc(50vh-4rem)] flex flex-col ${
+      className={`sticky top-8 w-72 xl:w-80 h-[calc(50vh-4rem)] flex flex-col ${
         theme === 'dark'
           ? 'bg-gray-800 border-gray-700'
           : 'bg-white border-gray-200'
