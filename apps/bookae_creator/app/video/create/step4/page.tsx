@@ -52,10 +52,10 @@ export default function Step4Page() {
       transition={{ duration: 0.3 }}
       className="flex min-h-screen justify-center"
     >
-      <div className="flex">
+      <div className="flex w-full max-w-[1600px]">
         <StepIndicator />
-        <div className="p-8 overflow-y-auto">
-          <div className="w-[918px]">
+        <div className="flex-1 p-4 md:p-8 overflow-y-auto min-w-0">
+          <div className="max-w-5xl mx-auto">
           <div className="mb-8">
             <div className="flex items-center gap-3 mb-2">
               <CheckCircle className="w-8 h-8 text-green-500" />

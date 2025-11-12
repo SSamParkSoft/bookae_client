@@ -31,7 +31,7 @@ export default function StepIndicator() {
   }
 
   return (
-    <div className={`sticky top-0 w-48 h-screen flex flex-col py-6 transition-colors z-10 ${
+    <div className={`sticky top-0 w-40 md:w-48 h-screen flex flex-col py-4 md:py-6 transition-colors z-10 flex-shrink-0 ${
       theme === 'dark'
         ? 'bg-gray-900 border-gray-800'
         : 'bg-white border-gray-200'
