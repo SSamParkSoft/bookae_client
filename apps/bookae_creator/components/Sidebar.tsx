@@ -4,6 +4,7 @@ import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { Home, Video, BarChart3, User } from 'lucide-react'
 import classNames from 'classnames'
+import { useThemeStore } from '../store/useThemeStore'
 
 const navigation = [
   { name: '메인', href: '/', icon: Home },
@@ -14,12 +15,23 @@ const navigation = [
 
 export default function Sidebar() {
   const pathname = usePathname()
+  const theme = useThemeStore((state) => state.theme)
 
   return (
-    <aside className="fixed left-0 top-0 h-full w-64 bg-white border-r border-gray-200 flex flex-col">
-      <div className="p-6 border-b border-gray-200">
-        <h1 className="text-xl font-bold text-gray-900">📦 Bookae</h1>
-        <p className="text-sm text-gray-500 mt-1">부업 자동화 서비스</p>
+    <aside className={`fixed left-0 top-0 h-full w-64 border-r flex flex-col transition-colors ${
+      theme === 'dark' 
+        ? 'bg-gray-900 border-gray-800' 
+        : 'bg-white border-gray-200'
+    }`}>
+      <div className={`p-6 border-b ${
+        theme === 'dark' ? 'border-gray-800' : 'border-gray-200'
+      }`}>
+        <h1 className={`text-xl font-bold ${
+          theme === 'dark' ? 'text-white' : 'text-gray-900'
+        }`}>📦 Bookae</h1>
+        <p className={`text-sm mt-1 ${
+          theme === 'dark' ? 'text-gray-400' : 'text-gray-500'
+        }`}>부업 자동화 서비스</p>
       </div>
       
       <nav className="flex-1 p-4 space-y-2">
@@ -34,8 +46,12 @@ export default function Sidebar() {
               className={classNames(
                 'flex items-center gap-3 px-4 py-3 rounded-lg transition-colors',
                 isActive
-                  ? 'bg-blue-50 text-blue-700 font-medium'
-                  : 'text-gray-700 hover:bg-gray-50'
+                  ? theme === 'dark'
+                    ? 'bg-purple-900/30 text-purple-300 font-medium'
+                    : 'bg-purple-50 text-purple-700 font-medium'
+                  : theme === 'dark'
+                    ? 'text-gray-300 hover:bg-gray-800'
+                    : 'text-gray-700 hover:bg-gray-50'
               )}
             >
               <Icon className="w-5 h-5" />
