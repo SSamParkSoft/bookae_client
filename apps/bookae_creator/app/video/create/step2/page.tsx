@@ -1,60 +1,33 @@
 'use client'
 
-import { useEffect, useState } from 'react'
-import { useRouter } from 'next/navigation'
-import { Sparkles, Loader2, CheckCircle } from 'lucide-react'
 import { motion } from 'framer-motion'
-import { useVideoCreateStore } from '../../../../store/useVideoCreateStore'
-import { useThemeStore } from '../../../../store/useThemeStore'
-import StepIndicator from '../../../../components/StepIndicator'
-
-const creationSteps = [
-  { id: 1, message: 'AI가 스크립트를 생성중입니다...', duration: 2000 },
-  { id: 2, message: 'AI가 영상 콘텐츠를 분석중입니다...', duration: 2000 },
-  { id: 3, message: 'AI가 영상을 제작중입니다...', duration: 3000 },
-  { id: 4, message: '최종 검토 중입니다...', duration: 1000 },
-]
+import { ArrowRight } from 'lucide-react'
+import { useRouter } from 'next/navigation'
+import { Button } from '@/components/ui/button'
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
+import StepIndicator from '@/components/StepIndicator'
+import { useVideoCreateStore } from '@/store/useVideoCreateStore'
+import { useThemeStore } from '@/store/useThemeStore'
+import SelectedProductEditor from '@/components/SelectedProductEditor'
+import VideoTitleInput from '@/components/VideoTitleInput'
+import ScriptEditor from '@/components/ScriptEditor'
+import ThumbnailDesignDialog from '@/components/ThumbnailDesignDialog'
+import VoiceSelectionDialog from '@/components/VoiceSelectionDialog'
+import SubtitleSelectionDialog from '@/components/SubtitleSelectionDialog'
+import BgmSelectionDialog from '@/components/BgmSelectionDialog'
+import TransitionEffectDialog from '@/components/TransitionEffectDialog'
+import PriceInfoToggle from '@/components/PriceInfoToggle'
+import IntroSelectionDialog from '@/components/IntroSelectionDialog'
 
 export default function Step2Page() {
   const router = useRouter()
-  const { setIsCreating, setCreationProgress } = useVideoCreateStore()
+  const { selectedProducts, scriptMethod } = useVideoCreateStore()
   const theme = useThemeStore((state) => state.theme)
-  const [currentStep, setCurrentStep] = useState(0)
-  const [completedSteps, setCompletedSteps] = useState<number[]>([])
+  const isEditMode = scriptMethod === 'edit'
 
-  useEffect(() => {
-    setIsCreating(true)
-    let stepIndex = 0
-
-    const processSteps = () => {
-      if (stepIndex < creationSteps.length) {
-        const step = creationSteps[stepIndex]
-        setCurrentStep(step.id)
-        setCreationProgress(((stepIndex + 1) / creationSteps.length) * 100)
-
-        setTimeout(() => {
-          setCompletedSteps((prev) => [...prev, step.id])
-          stepIndex++
-          if (stepIndex < creationSteps.length) {
-            processSteps()
-          } else {
-            setIsCreating(false)
-            setTimeout(() => {
-              router.push('/video/create/step3')
-            }, 500)
-          }
-        }, step.duration)
-      }
-    }
-
-    processSteps()
-
-    return () => {
-      setIsCreating(false)
-    }
-  }, [router, setIsCreating, setCreationProgress])
-
-  const currentStepData = creationSteps.find((s) => s.id === currentStep)
+  const handleNext = () => {
+    router.push('/video/create/step3')
+  }
 
   return (
     <motion.div
@@ -67,105 +40,192 @@ export default function Step2Page() {
       <div className="flex w-full max-w-[1600px]">
         <StepIndicator />
         <div className="flex-1 p-4 md:p-8 overflow-y-auto min-w-0">
-          <div className="max-w-5xl mx-auto">
-            <div className="flex flex-col items-center justify-center min-h-[calc(100vh-4rem)]">
-          <div className={`text-center mb-8 ${
-            theme === 'dark' ? 'text-white' : 'text-gray-900'
-          }`}>
-            <h1 className="text-3xl font-bold mb-2">영상 제작 중</h1>
-            <p className={theme === 'dark' ? 'text-gray-400' : 'text-gray-600'}>
-              AI가 영상을 제작하고 있습니다. 잠시만 기다려주세요.
-            </p>
-          </div>
-
-          {/* 진행 단계 표시 */}
-          <div className={`w-full rounded-lg shadow-sm border p-8 ${
-            theme === 'dark'
-              ? 'bg-gray-800 border-gray-700'
-              : 'bg-white border-gray-200'
-          }`}>
-            <div className="space-y-6">
-              {creationSteps.map((step) => {
-                const isActive = currentStep === step.id
-                const isCompleted = completedSteps.includes(step.id)
-                const isPending = !isActive && !isCompleted
-
-                return (
-                  <div
-                    key={step.id}
-                    className={`flex items-center gap-4 p-4 rounded-lg transition-all ${
-                      isActive
-                        ? theme === 'dark'
-                          ? 'bg-purple-900/30 border-2 border-purple-600'
-                          : 'bg-purple-50 border-2 border-purple-500'
-                        : theme === 'dark'
-                          ? 'bg-gray-900 border border-gray-700'
-                          : 'bg-gray-50 border border-gray-200'
-                    }`}
-                  >
-                    <div className="flex-shrink-0">
-                      {isCompleted ? (
-                        <CheckCircle className="w-6 h-6 text-green-500" />
-                      ) : isActive ? (
-                        <Loader2 className="w-6 h-6 text-purple-500 animate-spin" />
-                      ) : (
-                        <div className={`w-6 h-6 rounded-full border-2 ${
-                          theme === 'dark'
-                            ? 'border-gray-600'
-                            : 'border-gray-300'
-                        }`} />
-                      )}
-                    </div>
-                    <div className="flex-1">
-                      <p className={`font-medium ${
-                        isActive
-                          ? theme === 'dark'
-                            ? 'text-purple-300'
-                            : 'text-purple-700'
-                          : isCompleted
-                            ? theme === 'dark'
-                              ? 'text-gray-300'
-                              : 'text-gray-700'
-                            : theme === 'dark'
-                              ? 'text-gray-500'
-                              : 'text-gray-400'
-                      }`}>
-                        {step.message}
-                      </p>
-                    </div>
-                  </div>
-                )
-              })}
-            </div>
-          </div>
-
-          {/* 진행률 바 */}
-          <div className={`w-full mt-8 rounded-lg shadow-sm border p-6 ${
-            theme === 'dark'
-              ? 'bg-gray-800 border-gray-700'
-              : 'bg-white border-gray-200'
-          }`}>
-            <div className="flex items-center justify-center gap-4 mb-4">
-              <Sparkles className={`w-6 h-6 ${
-                theme === 'dark' ? 'text-purple-400' : 'text-purple-600'
-              }`} />
-              <span className={`font-medium ${
+          <div className="max-w-5xl mx-auto space-y-6">
+            <div>
+              <h1 className={`text-3xl font-bold mb-2 ${
                 theme === 'dark' ? 'text-white' : 'text-gray-900'
               }`}>
-                AI가 열심히 작업 중입니다...
-              </span>
+                영상 제작
+              </h1>
+              <p className={theme === 'dark' ? 'text-gray-400' : 'text-gray-600'}>
+                영상에 사용할 내용을 설정하세요
+              </p>
             </div>
-            <div className={`w-full h-2 rounded-full overflow-hidden ${
-              theme === 'dark' ? 'bg-gray-700' : 'bg-gray-200'
-            }`}>
-              <div
-                className="h-full bg-purple-500 transition-all duration-300"
-                style={{
-                  width: `${((currentStep - 1) / creationSteps.length) * 100}%`,
-                }}
-              />
+
+            {/* 선택된 상품 편집 */}
+            <div className="space-y-4">
+              <h2 className={`text-xl font-semibold ${
+                theme === 'dark' ? 'text-white' : 'text-gray-900'
+              }`}>
+                1. 선택된 상품
+              </h2>
+              {selectedProducts.map((product) => (
+                <SelectedProductEditor key={product.id} product={product} />
+              ))}
             </div>
-          </div>
+
+            {/* 유튜브 영상제목 입력 */}
+            <div>
+              <h2 className={`text-xl font-semibold mb-4 ${
+                theme === 'dark' ? 'text-white' : 'text-gray-900'
+              }`}>
+                2. 유튜브 영상제목 입력
+              </h2>
+              <VideoTitleInput />
+            </div>
+
+            {/* 스크립트 편집 (편집 모드만) */}
+            {isEditMode && (
+              <div>
+                <h2 className={`text-xl font-semibold mb-4 ${
+                  theme === 'dark' ? 'text-white' : 'text-gray-900'
+                }`}>
+                  3. 대본 편집
+                </h2>
+                <ScriptEditor />
+              </div>
+            )}
+
+            {/* 효과 선택 */}
+            <div className="space-y-4">
+              <h2 className={`text-xl font-semibold ${
+                theme === 'dark' ? 'text-white' : 'text-gray-900'
+              }`}>
+                {isEditMode ? '4. 효과 선택' : '3. 효과 선택'}
+              </h2>
+
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                {/* 썸네일 디자인 */}
+                <ThumbnailDesignDialog>
+                  <Card className={`cursor-pointer hover:border-purple-500 transition-colors ${
+                    theme === 'dark' ? 'bg-gray-800 border-gray-700' : 'bg-white border-gray-200'
+                  }`}>
+                    <CardHeader>
+                      <CardTitle className={theme === 'dark' ? 'text-white' : 'text-gray-900'}>
+                        썸네일 디자인
+                      </CardTitle>
+                    </CardHeader>
+                    <CardContent>
+                      <p className={`text-sm ${
+                        theme === 'dark' ? 'text-gray-400' : 'text-gray-600'
+                      }`}>
+                        썸네일 템플릿과 텍스트를 설정하세요
+                      </p>
+                    </CardContent>
+                  </Card>
+                </ThumbnailDesignDialog>
+
+                {/* 목소리 선택 */}
+                <VoiceSelectionDialog>
+                  <Card className={`cursor-pointer hover:border-purple-500 transition-colors ${
+                    theme === 'dark' ? 'bg-gray-800 border-gray-700' : 'bg-white border-gray-200'
+                  }`}>
+                    <CardHeader>
+                      <CardTitle className={theme === 'dark' ? 'text-white' : 'text-gray-900'}>
+                        목소리 선택
+                      </CardTitle>
+                    </CardHeader>
+                    <CardContent>
+                      <p className={`text-sm ${
+                        theme === 'dark' ? 'text-gray-400' : 'text-gray-600'
+                      }`}>
+                        TTS/STT를 활용한 목소리 템플릿을 선택하세요
+                      </p>
+                    </CardContent>
+                  </Card>
+                </VoiceSelectionDialog>
+
+                {/* 자막 선택 */}
+                <SubtitleSelectionDialog>
+                  <Card className={`cursor-pointer hover:border-purple-500 transition-colors ${
+                    theme === 'dark' ? 'bg-gray-800 border-gray-700' : 'bg-white border-gray-200'
+                  }`}>
+                    <CardHeader>
+                      <CardTitle className={theme === 'dark' ? 'text-white' : 'text-gray-900'}>
+                        자막 선택
+                      </CardTitle>
+                    </CardHeader>
+                    <CardContent>
+                      <p className={`text-sm ${
+                        theme === 'dark' ? 'text-gray-400' : 'text-gray-600'
+                      }`}>
+                        자막의 위치, 폰트, 색상을 선택하세요
+                      </p>
+                    </CardContent>
+                  </Card>
+                </SubtitleSelectionDialog>
+
+                {/* 배경음악 선택 */}
+                <BgmSelectionDialog>
+                  <Card className={`cursor-pointer hover:border-purple-500 transition-colors ${
+                    theme === 'dark' ? 'bg-gray-800 border-gray-700' : 'bg-white border-gray-200'
+                  }`}>
+                    <CardHeader>
+                      <CardTitle className={theme === 'dark' ? 'text-white' : 'text-gray-900'}>
+                        배경음악 선택
+                      </CardTitle>
+                    </CardHeader>
+                    <CardContent>
+                      <p className={`text-sm ${
+                        theme === 'dark' ? 'text-gray-400' : 'text-gray-600'
+                      }`}>
+                        배경음악 템플릿을 선택하세요
+                      </p>
+                    </CardContent>
+                  </Card>
+                </BgmSelectionDialog>
+
+                {/* 화면 전환효과 */}
+                <TransitionEffectDialog>
+                  <Card className={`cursor-pointer hover:border-purple-500 transition-colors ${
+                    theme === 'dark' ? 'bg-gray-800 border-gray-700' : 'bg-white border-gray-200'
+                  }`}>
+                    <CardHeader>
+                      <CardTitle className={theme === 'dark' ? 'text-white' : 'text-gray-900'}>
+                        화면 전환효과
+                      </CardTitle>
+                    </CardHeader>
+                    <CardContent>
+                      <p className={`text-sm ${
+                        theme === 'dark' ? 'text-gray-400' : 'text-gray-600'
+                      }`}>
+                        화면 전환효과 템플릿을 선택하세요
+                      </p>
+                    </CardContent>
+                  </Card>
+                </TransitionEffectDialog>
+
+                {/* 인트로 선택 */}
+                <IntroSelectionDialog>
+                  <Card className={`cursor-pointer hover:border-purple-500 transition-colors ${
+                    theme === 'dark' ? 'bg-gray-800 border-gray-700' : 'bg-white border-gray-200'
+                  }`}>
+                    <CardHeader>
+                      <CardTitle className={theme === 'dark' ? 'text-white' : 'text-gray-900'}>
+                        인트로 선택
+                      </CardTitle>
+                    </CardHeader>
+                    <CardContent>
+                      <p className={`text-sm ${
+                        theme === 'dark' ? 'text-gray-400' : 'text-gray-600'
+                      }`}>
+                        인트로 템플릿을 선택하세요
+                      </p>
+                    </CardContent>
+                  </Card>
+                </IntroSelectionDialog>
+              </div>
+
+              {/* 상품 가격 정보 표시 */}
+              <PriceInfoToggle />
+            </div>
+
+            {/* 다음 단계 버튼 */}
+            <div className="flex justify-end pt-6">
+              <Button onClick={handleNext} size="lg" className="gap-2">
+                <span>다음 단계</span>
+                <ArrowRight className="h-5 w-5" />
+              </Button>
             </div>
           </div>
         </div>
@@ -173,4 +233,3 @@ export default function Step2Page() {
     </motion.div>
   )
 }
-
