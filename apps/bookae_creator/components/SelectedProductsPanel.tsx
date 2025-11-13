@@ -65,7 +65,11 @@ export default function SelectedProductsPanel() {
         }}
         className={`flex-1 overflow-y-auto ${
           selectedProducts.length === 0
-            ? `flex items-center justify-center border-2 border-dashed rounded-lg`
+            ? `flex items-center justify-center border border-dashed rounded-lg ${
+                theme === 'dark' 
+                  ? 'border-gray-600' 
+                  : 'border-gray-300'
+              }`
             : ''
         }`}
       >
@@ -118,7 +122,7 @@ export default function SelectedProductsPanel() {
       </CardContent>
 
       {/* 다음 단계 버튼 */}
-      <div className="p-4 border-t">
+      <div className="p-4">
         <Button
           onClick={handleNext}
           disabled={selectedProducts.length === 0}
