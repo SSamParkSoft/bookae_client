@@ -139,7 +139,7 @@ export default function YouTubeStats() {
         <h3 className={`text-lg font-semibold mb-4 ${
           theme === 'dark' ? 'text-gray-300' : 'text-gray-700'
         }`}>
-          💰 수익 통계
+          수익 통계
         </h3>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
           {revenueStats.map((stat, index) => {
@@ -175,7 +175,7 @@ export default function YouTubeStats() {
         <h3 className={`text-lg font-semibold mb-4 ${
           theme === 'dark' ? 'text-gray-300' : 'text-gray-700'
         }`}>
-          📊 기타 통계
+          기타 통계
         </h3>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
           {otherStats.map((stat, index) => {

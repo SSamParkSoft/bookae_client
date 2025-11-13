@@ -76,7 +76,16 @@ export interface YouTubeTrafficSource {
   percentage: number
 }
 
+export interface YouTubeVideo {
+  videoId: string
+  title: string
+  thumbnailUrl?: string
+  publishedAt?: string
+}
+
 export interface YouTubeStats {
+  videoId?: string
+  videoTitle?: string
   // 수익 관련 (우선 표시)
   totalEstimatedRevenue: number
   adRevenue: number

@@ -5,7 +5,7 @@ import { YouTubeStats } from '@/lib/types/statistics'
 // 현재는 더미 데이터 반환
 export async function GET() {
   try {
-    // 더미 데이터 생성
+    // 더미 데이터 생성 (전체 통계)
     const dummyData: YouTubeStats = {
       // 수익 관련 (우선 표시)
       totalEstimatedRevenue: Math.floor(Math.random() * 500000) + 100000,
