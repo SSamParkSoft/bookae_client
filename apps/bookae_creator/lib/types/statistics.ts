@@ -81,6 +81,7 @@ export interface YouTubeVideo {
   title: string
   thumbnailUrl?: string
   publishedAt?: string
+  views?: number
 }
 
 export interface YouTubeStats {
