@@ -20,6 +20,7 @@ Next.js 16 + TypeScript 기반으로, 상품 정보를 자동으로 크롤링하
 - **Framework:** Next.js 16 (App Router)
 - **Language:** TypeScript
 - **Styling:** TailwindCSS
+- **UI Components:** shadcn/ui
 - **State Management:** Zustand
 - **Data Fetching:** TanStack Query
 - **Package Manager:** pnpm (Workspace)
