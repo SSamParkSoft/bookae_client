@@ -104,7 +104,7 @@ export default function ImageSelectionPanel({
           }`}>
             선택된 이미지 ({selectedImages.length}장)
           </h4>
-          <div className="flex gap-3 overflow-x-auto pb-2">
+          <div className="flex gap-3 overflow-x-auto pb-2 pt-4 pl-4">
             {selectedImages.map((imageUrl, index) => (
               <div key={imageUrl} className="relative flex-shrink-0">
                 <div className="relative w-24 h-24 rounded-lg overflow-hidden border-2 border-purple-500">
@@ -124,8 +124,8 @@ export default function ImageSelectionPanel({
                     <X className="w-4 h-4 text-red-500" />
                   </button>
                 </div>
-                <div className="absolute -top-2 -left-2 w-6 h-6 rounded-full bg-purple-500 flex items-center justify-center">
-                  <span className="text-white text-xs font-bold">{index + 1}</span>
+                <div className="absolute -top-3 -left-3 w-8 h-8 rounded-full bg-purple-500 flex items-center justify-center shadow-lg z-10">
+                  <span className="text-white text-sm font-bold">{index + 1}</span>
                 </div>
               </div>
             ))}
