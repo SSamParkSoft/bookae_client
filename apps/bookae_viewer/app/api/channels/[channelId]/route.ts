@@ -3,9 +3,19 @@ import { ChannelInfo } from '@/lib/types/viewer'
 
 // 더미 채널 데이터 (추후 DB 연동)
 const DUMMY_CHANNELS: Record<string, ChannelInfo> = {
+  ssambak: {
+    id: 'ssambak',
+    name: '쌈박한 소프트',
+    profileImage: 'https://via.placeholder.com/200/06b6d4/ffffff?text=쌈박한소프트',
+    description: '가성비 좋은 제품을 찾아드립니다',
+    youtubeChannelId: 'UC1234567890',
+    youtubeChannelName: 'ssambak',
+    subscriberCount: 50000,
+    businessEmail: 'business@example.com',
+  },
   compare_everything_lab: {
     id: 'compare_everything_lab',
-    name: '쌈박한 소프트',
+    name: '123',
     profileImage: 'https://via.placeholder.com/200/06b6d4/ffffff?text=쌈박한소프트',
     description: '가성비 좋은 제품을 찾아드립니다',
     youtubeChannelId: 'UC1234567890',
