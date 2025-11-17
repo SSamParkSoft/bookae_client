@@ -27,7 +27,9 @@ export default function SelectedProductsPanel() {
         const product = JSON.parse(data) as Product
         // 이미 선택된 상품인지 확인
         const isAlreadySelected = selectedProducts.some((p) => p.id === product.id)
-        if (!isAlreadySelected) {
+        if (isAlreadySelected) {
+          removeProduct(product.id)
+        } else {
           addProduct(product)
         }
       } catch (error) {

@@ -129,11 +129,22 @@ export const useVideoCreateStore = create<VideoCreateState>((set) => ({
   setCurrentStep: (step) => set({ currentStep: step }),
   addProduct: (product) =>
     set((state) => {
-      const exists = state.selectedProducts.some((p) => p.id === product.id)
-      if (exists) return state
+      const isSameProductSelected = state.selectedProducts.some((p) => p.id === product.id)
+      if (isSameProductSelected) {
+        // 이미 선택된 상품이면 변경 없음
+        return state
+      }
+
+      const existingVideos = state.productVideos[product.id]
+      const existingImages = state.productImages[product.id]
+      const existingDetailImages = state.productDetailImages[product.id]
+
       return {
-        selectedProducts: [...state.selectedProducts, product],
-        productNames: { ...state.productNames, [product.id]: product.name },
+        selectedProducts: [product],
+        productNames: { [product.id]: product.name },
+        productVideos: existingVideos ? { [product.id]: existingVideos } : {},
+        productImages: existingImages ? { [product.id]: existingImages } : {},
+        productDetailImages: existingDetailImages ? { [product.id]: existingDetailImages } : {},
       }
     }),
   removeProduct: (productId) =>
