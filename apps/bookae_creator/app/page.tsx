@@ -10,6 +10,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from '@/components/ui/dialog'
 import { useThemeStore } from '@/store/useThemeStore'
 import { TrendingUp, ShoppingCart, Eye, Loader2, Youtube, Users, Store, DollarSign, Video, ArrowRight } from 'lucide-react'
+import HomeShortcut from '@/components/HomeShortcut'
 
 const formatNumber = (num: number): string => {
   if (num >= 1000000) {
@@ -136,6 +137,9 @@ export default function HomePage() {
             금주의 인기 키워드와 성과를 확인하세요
           </p>
         </div>
+
+        {/* 내 홈페이지 바로가기 */}
+        <HomeShortcut />
 
         {/* 통계 요약 및 영상 만들러가기 */}
         {isLoading ? (
