@@ -27,7 +27,9 @@ export default function SelectedProductsPanel() {
         const product = JSON.parse(data) as Product
         // 이미 선택된 상품인지 확인
         const isAlreadySelected = selectedProducts.some((p) => p.id === product.id)
-        if (!isAlreadySelected) {
+        if (isAlreadySelected) {
+          removeProduct(product.id)
+        } else {
           addProduct(product)
         }
       } catch (error) {
@@ -42,7 +44,7 @@ export default function SelectedProductsPanel() {
   }
 
   return (
-    <Card className="sticky top-8 w-72 xl:w-80 h-[calc(50vh-4rem)] flex flex-col">
+    <Card className="sticky top-8 w-72 xl:w-80 h-[calc(50vh-4rem)] flex flex-col border-gray-200">
       <CardHeader>
         <CardTitle>선택된 상품</CardTitle>
         <p className={`text-sm ${
@@ -83,7 +85,7 @@ export default function SelectedProductsPanel() {
         ) : (
           <div className="space-y-3">
             {selectedProducts.map((product) => (
-              <Card key={product.id}>
+              <Card key={product.id} className="border-gray-200">
                 <CardContent className="p-3">
                   <div className="flex items-start gap-3">
                     <div className="w-12 h-12 bg-gray-200 dark:bg-gray-700 rounded-lg" />

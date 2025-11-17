@@ -383,7 +383,13 @@ export default function Step1Page() {
                     key={product.id}
                     draggable
                     onDragStart={(e) => handleDragStart(e, product)}
-                    onClick={() => !isSelected && addProduct(product)}
+                    onClick={() => {
+                      if (isSelected) {
+                        removeProduct(product.id)
+                      } else {
+                        addProduct(product)
+                      }
+                    }}
                     className={`p-4 rounded-lg border-2 cursor-move transition-all ${
                       isSelected
                         ? 'border-purple-500 bg-purple-50 dark:bg-purple-900/20'
