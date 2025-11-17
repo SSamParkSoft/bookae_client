@@ -214,7 +214,7 @@ function SortableSceneCard({
                 <span>{scene.editedScript.length}자</span>
                 <button
                   type="button"
-                  className="text-purple-500 underline"
+                  className="text-purple-500 underline cursor-pointer"
                   onClick={() => onSceneChange(scene.id, { editedScript: scene.recommendedScript })}
                 >
                   추천 문장으로 되돌리기
