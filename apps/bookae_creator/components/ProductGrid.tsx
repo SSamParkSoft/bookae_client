@@ -8,6 +8,7 @@ import { Card, CardContent } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
 import { Product, Platform, useVideoCreateStore } from '../store/useVideoCreateStore'
 import { useThemeStore } from '../store/useThemeStore'
+import { SPAEL_PRODUCT } from '@/lib/data/spaelProduct'
 
 // 더미 데이터
 const dummyProducts: Record<Platform, Product[]> = {
@@ -70,15 +71,7 @@ const dummyProducts: Record<Platform, Product[]> = {
       url: 'https://www.aliexpress.com/item/a1',
       description: 'RGB LED 조명',
     },
-    {
-      id: 'a2',
-      name: '스마트폰 케이스',
-      price: 5900,
-      image: 'https://via.placeholder.com/200',
-      platform: 'aliexpress',
-      url: 'https://www.aliexpress.com/item/a2',
-      description: '방수 보호 케이스',
-    },
+    SPAEL_PRODUCT,
   ],
   amazon: [
     {

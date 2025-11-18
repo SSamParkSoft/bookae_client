@@ -62,7 +62,7 @@ export default function Step3Page() {
     // 더미 영상 생성 시뮬레이션 (3~5초)
     setTimeout(() => {
       clearInterval(progressInterval)
-      const videoUrl = 'https://example.com/final-video.mp4' // 더미 URL
+      const videoUrl = '/media/Scenario_video.mp4' // 실제 영상 파일 경로
       setFinalVideoUrl(videoUrl)
       setGenerationProgress(100)
       setIsGeneratingVideo(false)

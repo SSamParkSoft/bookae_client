@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect, useRef } from 'react'
+import { useState, useEffect, useRef, useMemo } from 'react'
 import { useRouter } from 'next/navigation'
 import { motion } from 'framer-motion'
 import { Camera, Bot, ArrowRight, Video, ChevronDown } from 'lucide-react'
@@ -16,11 +16,22 @@ import VideoUploader from '@/components/VideoUploader'
 import { conceptOptions, conceptTones, type ConceptType } from '@/lib/data/templates'
 import AutoModeSection from '@/components/AutoModeSection'
 import type { AutoScene } from '@/lib/types/video'
+import { useMediaAssets } from '@/lib/hooks/useMediaAssets'
+import { mapMediaAssetsToSpaelScenario } from '@/lib/data/spaelAssets'
+import { isSpaelProduct } from '@/lib/data/spaelProduct'
 
 export default function Step2Page() {
   const router = useRouter()
   const { selectedProducts, setStep2Result, concept, tone, setConcept, setTone } = useVideoCreateStore()
   const theme = useThemeStore((state) => state.theme)
+  const { data: mediaAssets } = useMediaAssets()
+  const selectedProduct = selectedProducts[0]
+  const isSpaelSelected = isSpaelProduct(selectedProduct)
+  const spaelScenario = useMemo(() => {
+    if (!isSpaelSelected || !mediaAssets) return null
+    return mapMediaAssetsToSpaelScenario(mediaAssets)
+  }, [isSpaelSelected, mediaAssets])
+  const spaelReferenceVideo = spaelScenario?.finalVideo?.url
   
   const [mode, setMode] = useState<Step2Mode | null>(null)
   const [selectedScriptStyle, setSelectedScriptStyle] = useState<ConceptType | null>(null)
@@ -162,6 +173,7 @@ export default function Step2Page() {
       selectedImages: scenes.map((scene) => scene.imageUrl),
       scenes,
       draftVideo: '',
+      referenceVideo: spaelReferenceVideo,
     }
     setStep2Result(result)
     router.push('/video/create/step3')
@@ -537,12 +549,22 @@ export default function Step2Page() {
                 animate={{ opacity: 1, y: 0 }}
                 className="space-y-6"
               >
-                <AutoModeSection
-                  conceptId={selectedScriptStyle}
-                  toneId={selectedTone}
-                  minScenes={5}
-                  onComplete={handleAutoScenesComplete}
-                />
+                {isSpaelSelected && !spaelScenario ? (
+                  <Card className={theme === 'dark' ? 'bg-gray-800 border-gray-700' : 'bg-white border-gray-200'}>
+                    <CardHeader>
+                      <CardTitle>스파알 전용 시나리오 불러오는 중...</CardTitle>
+                      <CardDescription>DB에 저장된 이미지와 대본을 로딩하고 있습니다.</CardDescription>
+                    </CardHeader>
+                  </Card>
+                ) : (
+                  <AutoModeSection
+                    conceptId={selectedScriptStyle}
+                    toneId={selectedTone}
+                    minScenes={5}
+                    assets={isSpaelSelected ? spaelScenario?.images : undefined}
+                    onComplete={handleAutoScenesComplete}
+                  />
+                )}
               </motion.section>
             )}
 

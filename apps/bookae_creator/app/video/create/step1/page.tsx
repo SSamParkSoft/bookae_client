@@ -8,6 +8,7 @@ import { useVideoCreateStore, Product, Platform } from '../../../../store/useVid
 import { useThemeStore } from '../../../../store/useThemeStore'
 import StepIndicator from '../../../../components/StepIndicator'
 import SelectedProductsPanel from '../../../../components/SelectedProductsPanel'
+import { SPAEL_PRODUCT } from '@/lib/data/spaelProduct'
 
 // 인기 제품 더미 데이터
 const popularProducts = [
@@ -119,6 +120,9 @@ const dummyProducts: Record<Platform, Product[]> = {
   aliexpress: generateProducts('aliexpress', 20),
   amazon: generateProducts('amazon', 20),
 }
+
+// 7번째 항목을 스파알 제품으로 교체
+dummyProducts.aliexpress[6] = SPAEL_PRODUCT
 
 const platformNames: Record<Platform, string> = {
   coupang: '쿠팡',
