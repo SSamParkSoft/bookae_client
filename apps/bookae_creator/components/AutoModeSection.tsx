@@ -32,6 +32,8 @@ interface AutoModeSectionProps {
   minScenes?: number
   maxScenes?: number
   onComplete: (scenes: AutoScene[]) => void
+  assets?: CrawledImageAsset[]
+  presetAssets?: CrawledImageAsset[]
 }
 
 export default function AutoModeSection({
@@ -40,6 +42,8 @@ export default function AutoModeSection({
   minScenes = 5,
   maxScenes,
   onComplete,
+  assets,
+  presetAssets,
 }: AutoModeSectionProps) {
   const theme = useThemeStore((state) => state.theme)
   const [scenes, setScenes] = useState<AutoScene[]>([])
@@ -48,6 +52,7 @@ export default function AutoModeSection({
   const [sceneStatuses, setSceneStatuses] = useState<Record<string, SceneStatus>>({})
   const timeoutRefs = useRef<Array<ReturnType<typeof setTimeout>>>([])
   const sceneBoardRef = useRef<HTMLDivElement>(null)
+  const assetPool = assets && assets.length > 0 ? assets : crawledImagePool
 
   useEffect(() => {
     timeoutRefs.current.forEach((id) => clearTimeout(id))
@@ -55,6 +60,24 @@ export default function AutoModeSection({
     setScenes([])
     setSceneStatuses({})
   }, [conceptId, toneId])
+
+  useEffect(() => {
+    if (!presetAssets?.length || scenes.length > 0) return
+    const presetScenes = presetAssets.map((asset, index) =>
+      createSceneFromAsset(asset, conceptId, toneId, index),
+    )
+    setScenes(presetScenes)
+    setSceneStatuses(
+      presetScenes.reduce<Record<string, SceneStatus>>((acc, scene) => {
+        acc[scene.id] = {
+          state: 'ready',
+          progress: 100,
+          stage: SCENE_LOADING_STEPS.length - 1,
+        }
+        return acc
+      }, {}),
+    )
+  }, [presetAssets, conceptId, toneId, scenes.length])
 
   useEffect(() => {
     return () => {
@@ -180,7 +203,7 @@ export default function AutoModeSection({
       className="space-y-8"
     >
       <AutoImagePicker
-        assets={crawledImagePool}
+        assets={assetPool}
         scenes={scenes}
         minSelection={minScenes}
         maxSelection={maxScenes}

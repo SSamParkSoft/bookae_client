@@ -7,6 +7,7 @@ export interface CrawledImageAsset {
   url: string
   label: string
   description: string
+  scriptOverride?: string
 }
 
 export const crawledImagePool: CrawledImageAsset[] = [
@@ -48,9 +49,11 @@ export const crawledImagePool: CrawledImageAsset[] = [
   },
   {
     id: 'prod-7',
-    url: 'https://images.unsplash.com/photo-1612810806683-3fa63cf62ca1?auto=format&fit=crop&w=600&q=80',
-    label: '제품 사진 7',
-    description: '구성품을 함께 담아 전체 패키지를 보여주는 장면',
+    url: '/media/num1.png',
+    label: '스파알 목어깨 마사지기',
+    description: '스마트폰 · 컴퓨터로 뭉친 목과 어깨를 6개의 손맛 헤드로 풀어주는 제품',
+    scriptOverride:
+      '잠깐 주목! 목이랑 어깨 아파서 고생하는 사람들 모여주세요.\n집에서 셀프로 받는 제대로 된 손 마사지, 스파알로 시작하세요.',
   },
   {
     id: 'prod-8',
@@ -118,6 +121,9 @@ const generateSceneId = (assetId: string) => {
 }
 
 const composeScript = (conceptId: ConceptType, toneId: string, asset: CrawledImageAsset, index: number) => {
+  if (asset.scriptOverride) {
+    return asset.scriptOverride
+  }
   const preset = getTonePreset(toneId)
   const conceptLabel = getConceptLabel(conceptId)
   const toneLabel = getToneLabel(toneId)

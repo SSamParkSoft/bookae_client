@@ -34,6 +34,7 @@ export interface Step2Result {
   scenes?: AutoScene[] // auto 모드용
   uploadedVideo?: File // manual 모드용
   draftVideo: string // AI 초안 영상 경로
+  referenceVideo?: string // DB 추천 영상 경로
 }
 
 interface VideoCreateState {
