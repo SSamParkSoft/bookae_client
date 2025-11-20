@@ -19,6 +19,7 @@ export interface TopProduct {
   totalGmv: number // 총 거래 금액
   averagePrice: number // 평균 가격
   orderCount: number // 주문 건수
+  productUrl?: string
 }
 
 // 제품 그리드용 제품 타입
@@ -31,6 +32,7 @@ export interface Product {
   thumbnailUrl?: string
   description?: string
   order: number // 순서 (ID)
+  url?: string
 }
 
 // 채널 통계 타입

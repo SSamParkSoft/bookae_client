@@ -8,30 +8,29 @@ import TopProducts from '@/components/TopProducts'
 import ProductSearch from '@/components/ProductSearch'
 import ProductGrid from '@/components/ProductGrid'
 import { useChannelInfo } from '@/lib/hooks/useChannelInfo'
-import { useChannelStats } from '@/lib/hooks/useChannelStats'
-import { useQuery } from '@tanstack/react-query'
-import { Product } from '@/lib/types/viewer'
 import { Loader2 } from 'lucide-react'
-
-const fetchProducts = async (channelId: string, search: string): Promise<Product[]> => {
-  const url = `/api/channels/${channelId}/products${search ? `?search=${encodeURIComponent(search)}` : ''}`
-  const response = await fetch(url)
-  if (!response.ok) {
-    throw new Error('제품 목록을 가져오는데 실패했습니다.')
-  }
-  return response.json()
-}
+import { STATIC_PRODUCTS, STATIC_TOP_PRODUCTS } from '@/lib/data/staticProducts'
 
 function ChannelPageContent({ channelId }: { channelId: string }) {
   const [searchQuery, setSearchQuery] = React.useState('')
 
   const { data: channelInfo, isLoading: channelLoading } = useChannelInfo(channelId)
-  const { data: stats, isLoading: statsLoading } = useChannelStats(channelId)
-  const { data: products, isLoading: productsLoading } = useQuery({
-    queryKey: ['channel-products', channelId, searchQuery],
-    queryFn: () => fetchProducts(channelId, searchQuery),
-    staleTime: 5 * 60 * 1000, // 5분간 캐시 유지
-  })
+
+  const filteredProducts = React.useMemo(() => {
+    if (!searchQuery.trim()) {
+      return STATIC_PRODUCTS
+    }
+
+    const searchLower = searchQuery.toLowerCase()
+    const searchNumber = parseInt(searchQuery, 10)
+    const isNumericSearch = !isNaN(searchNumber) && searchQuery.trim() !== ''
+
+    return STATIC_PRODUCTS.filter(
+      (product) =>
+        product.name.toLowerCase().includes(searchLower) ||
+        (isNumericSearch && product.order === searchNumber),
+    )
+  }, [searchQuery])
 
   if (channelLoading) {
     return (
@@ -61,11 +60,7 @@ function ChannelPageContent({ channelId }: { channelId: string }) {
       <ChannelProfile channel={channelInfo} />
 
       {/* Top 5 제품 섹션 */}
-      <TopProducts
-        topProducts={stats?.topProducts || []}
-        isLoading={statsLoading}
-        channelName={channelInfo.name}
-      />
+      <TopProducts topProducts={STATIC_TOP_PRODUCTS} isLoading={false} channelName={channelInfo.name} />
 
       {/* 검색 바 */}
       <ProductSearch
@@ -74,7 +69,7 @@ function ChannelPageContent({ channelId }: { channelId: string }) {
       />
 
       {/* 제품 그리드 */}
-      <ProductGrid products={products || []} isLoading={productsLoading} />
+      <ProductGrid products={filteredProducts} isLoading={false} />
 
       {/* 하단 여백 */}
       <div className="h-8" />
