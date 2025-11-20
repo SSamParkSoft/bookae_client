@@ -58,7 +58,7 @@ export default function TopProducts({ topProducts, isLoading, channelName = '쌈
 
               if (!product.thumbnailUrl) {
                 return (
-                  <div className="w-full h-full bg-gradient-to-br from-purple-100 to-purple-200 flex items-center justify-center">
+                  <div className="w-full h-full bg-linear-to-br from-purple-100 to-purple-200 flex items-center justify-center">
                     <ShoppingCart className="w-12 h-12 text-purple-400" />
                   </div>
                 )
@@ -66,7 +66,7 @@ export default function TopProducts({ topProducts, isLoading, channelName = '쌈
 
               if (imageError) {
                 return (
-                  <div className="w-full h-full bg-gradient-to-br from-purple-100 to-purple-200 flex items-center justify-center">
+                  <div className="w-full h-full bg-linear-to-br from-purple-100 to-purple-200 flex items-center justify-center">
                     <ShoppingCart className="w-12 h-12 text-purple-400" />
                   </div>
                 )
@@ -82,26 +82,43 @@ export default function TopProducts({ topProducts, isLoading, channelName = '쌈
               )
             }
 
-            return (
-              <div
-                key={product.productId}
-                className="flex-shrink-0 w-40 bg-white rounded-lg border border-purple-100 overflow-hidden shadow-sm"
-              >
+            const card = (
+              <div className="shrink-0 w-40 bg-white rounded-lg border border-purple-100 overflow-hidden shadow-sm hover:shadow-md transition-shadow">
                 {/* 제품 이미지 */}
                 <div className="w-full h-40 bg-purple-50 relative overflow-hidden">
                   <ProductImage />
                 </div>
 
-            {/* 제품 정보 */}
-            <div className="p-3">
-              <h3 className="text-sm font-medium text-gray-900 line-clamp-2 mb-2 min-h-[2.5rem]">
-                {product.productName}
-              </h3>
-              <p className="text-base font-bold text-gray-900">
-                {formatPrice(product.averagePrice)}
-              </p>
-            </div>
-          </div>
+                {/* 제품 정보 */}
+                <div className="p-3">
+                  <h3 className="text-sm font-medium text-gray-900 line-clamp-2 mb-2 min-h-10">
+                    {product.productName}
+                  </h3>
+                  <p className="text-base font-bold text-gray-900">
+                    {formatPrice(product.averagePrice)}
+                  </p>
+                </div>
+              </div>
+            )
+
+            if (product.productUrl) {
+              return (
+                <a
+                  key={product.productId}
+                  href={product.productUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="focus:outline-none focus-visible:ring-2 focus-visible:ring-purple-400 rounded-lg"
+                >
+                  {card}
+                </a>
+              )
+            }
+
+            return (
+              <div key={product.productId}>
+                {card}
+              </div>
             )
           })}
         </div>
