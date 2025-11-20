@@ -1,7 +1,6 @@
 'use client'
 
 import { usePathname } from 'next/navigation'
-import AuthGuard from './AuthGuard'
 import Sidebar from './Sidebar'
 import ThemeToggle from './ThemeToggle'
 
@@ -20,13 +19,13 @@ export default function AppShell({ children }: AppShellProps) {
   }
 
   return (
-    <AuthGuard>
+    <>
       <div className="flex min-h-screen">
         <Sidebar />
         <main className="flex-1 ml-64">{children}</main>
       </div>
       <ThemeToggle />
-    </AuthGuard>
+    </>
   )
 }
 
